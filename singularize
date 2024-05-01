@@ -1,0 +1,20 @@
+create or replace function singularize(s string)
+    returns string
+    language python
+    runtime_version = 3.11
+    packages =('inflect==7.0.0', 'snowflake-snowpark-python')
+    handler = 'singularize'
+    as
+$$
+import inflect
+p = inflect.engine()
+
+def singularize(s):
+    return p.singular_noun(s)
+$$
+;
+
+select singularize('Blueberries');
+
+# Checks if a noun is already singular
+select singularize('Blueberry'); //returns 'False'
